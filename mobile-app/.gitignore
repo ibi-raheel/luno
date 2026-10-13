@@ -1,0 +1,103 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# Environment variables - SENSITIVE!
+.env
+.env.local
+.env*.local
+.env.development
+.env.production
+
+# Firebase config files - SENSITIVE!
+google-services.json
+GoogleService-Info.plist
+
+# Private keys and certificates - SENSITIVE!
+keys/
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+!debug.keystore
+
+# Credentials and secrets - SENSITIVE!
+*credentials*.json
+*secrets*.json
+*config.json
+service-account*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# typescript
+*.tsbuildinfo
+
+# generated native folders
+/ios
+/android
+
+# Build outputs
+build/
+*.app
+*.ipa
+*.apk
+*.aab
+
+# Logs
+logs/
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# OS
+Thumbs.db
+
+# Claude Code
+.claude/

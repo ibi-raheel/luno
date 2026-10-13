@@ -42,6 +42,38 @@ Press the button, talk, hear Luna answer through a 3-watt speaker. Firmware hand
 4. System prompt limits replies to one to three sentences because this is a voice channel.
 5. Hardware: INMP441 mic, MAX98357A amp, one button; schematic and PCB in KiCad.
 
+## The cognitive engine, grounded replies and child profiles
+
+The first version (`backend/`, `esp32/`) is the voice loop. The production system (`cloud-backend/`, `mobile-app/`) adds what lets Luna know the child she's talking to.
+
+**1. The cognitive engine: a knowledge graph for each child.** After every conversation, GPT-4o-mini extracts:
+- five kinds of entities: topics, skills, interests, concepts and personality traits, keeping only those at confidence ≥ 0.7;
+- three kinds of relationships: topics discussed together, learning pathways from a prerequisite to a skill, and emotions tied to a topic.
+
+They're stored as that child's own graph in Firestore (`users/{id}/children/{id}/entities` and `edges`), with moving-average edge weights and an append-only observation log. See `cloud-backend/knowledge_graph_service.py`.
+
+**2. Grounded replies: retrieval from that graph (graph RAG).** Before every reply, the backend:
+1. detects which entities the child just mentioned;
+2. walks the graph (BFS) for related topics and concepts, interest clusters, learning progressions and emotional connections;
+3. adds them to Luna's prompt as a short *child profile*.
+
+So a child who talked about dinosaurs last week gets a follow-up about fossils, not a generic answer. See `cloud-backend/gpt_reply.py` and `graph_query_service.py`.
+
+**3. Individual profiles and the parent app.**
+- One parent account holds several children, each with their own profile, graph and conversation history.
+- The Expo / React Native app shows each child's timeline, conversations, interests and insights.
+- It raises real-time safety flags (critical, high or medium) for personal information, inappropriate content or signs of distress.
+- Parental controls and per-toy settings live there too.
+
+See `mobile-app/`.
+
+| Folder | What it is |
+|---|---|
+| `esp32/` | the toy's firmware: I2S mic and amp, button, WebSocket audio |
+| `backend/` | the first voice server: Whisper → gpt-4o-mini → ElevenLabs |
+| `cloud-backend/` | the production backend: Flask, Firestore, Firebase Auth, the knowledge graph, safety flags, sessions, ESP32 simulators, AWS EC2 deploy scripts |
+| `mobile-app/` | the parent app: Expo / React Native + Firebase, Cloud Functions in `functions/` |
+
 ## Hardware Required
 
 - **ESP32-S3 DevKit** (or similar ESP32-S3 board)

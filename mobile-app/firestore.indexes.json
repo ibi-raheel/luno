@@ -1,0 +1,15 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "toys",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "deviceId",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
